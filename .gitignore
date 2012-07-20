@@ -4,3 +4,8 @@ obj
 
 # mstest test results
 TestResults
+
+# Local project files
+*.suo
+*.user
+*.Debug.cachefile
