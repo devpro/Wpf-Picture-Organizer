@@ -11,6 +11,7 @@ namespace Devpro.PictureOrganizer.Console
   /// Picture organizer console.
   /// </summary>
   /// <example>Devpro.PictureOrganizerCons.exe "C:\\Users\\Bertrand\\Downloads\\Microsoft_headquarters_webanswers.jpg" property-overview</example>
+  /// <example>Devpro.PictureOrganizerCons.exe "C:\\Users\\Bertrand\\Downloads\\tests" reset-date</example>
   class Program
   {
     static void Main(string[] args)
@@ -26,6 +27,10 @@ namespace Devpro.PictureOrganizer.Console
         switch (args[1]) {
           case "property-overview":
             DisplayOverview(filepath);
+            break;
+          case "reset-date":
+            var task = new ResetPictureFileDateTask();
+            task.Execute(filepath);
             break;
           default:
             MoveDate(filepath, 60); // tests
