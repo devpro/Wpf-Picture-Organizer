@@ -77,7 +77,7 @@ namespace PictureViewerGui
       // SourceUpdated event on Image does not work...
 
       if (!string.IsNullOrEmpty(filename)) {
-        img.Source          = new BitmapImage(new Uri(filename));
+        img.Source          = LoadImage(filename);
         textBlock.Text      = GetPictureDetail(filename);
       } else {
         img.Source          = null;
@@ -195,6 +195,31 @@ namespace PictureViewerGui
       if (_pictureDataRight.CurrentIndex > 0) {
         _pictureDataRight.CurrentIndex--;
       }
+    }
+
+    private static ImageSource LoadImage(string filename)
+    {
+      // new BitmapImage(new Uri(filename)) // too expensive in memory 
+
+      // ref. http://msdn.microsoft.com/fr-fr/library/system.windows.controls.image.aspx
+
+      if (!File.Exists(filename)) { return null; }
+
+      // Create source
+      var myBitmapImage = new BitmapImage();
+
+      // BitmapImage.UriSource must be in a BeginInit/EndInit block
+      myBitmapImage.BeginInit();
+      myBitmapImage.UriSource = new Uri(filename);
+
+      // To save significant application memory, set the DecodePixelWidth or DecodePixelHeight of the BitmapImage value
+      // of the image source to the desired height or width of the rendered image. If you don't do this, the application
+      // will cache the image as though it were rendered as its normal size rather then just the size that is displayed.
+      // Note: In order to preserve aspect ratio, set DecodePixelWidth or DecodePixelHeight but not both.
+      myBitmapImage.DecodePixelWidth = 200;
+      myBitmapImage.EndInit();
+
+      return myBitmapImage;
     }
   }
 }
